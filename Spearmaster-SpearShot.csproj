@@ -31,6 +31,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Reference\RainWorld_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\Reference\RainWorld_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
