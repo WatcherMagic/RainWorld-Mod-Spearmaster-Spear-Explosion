@@ -16,33 +16,52 @@ namespace Spearmaster_Spear_Explosion
 
         private void OnEnable()
         {
-            On.Player.Update += TakeCustomInput;
+            On.Player.GrabUpdate += TakeCustomInput;
         }
 
-        private void TakeCustomInput(On.Player.orig_Update orig, Player self, bool eu)
+        private bool tapPressedOnce(Player self, int n)
         {
-
-            orig(self, eu);
-
-            if (ModManager.MSC && self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear)
+            if (n < 9)
             {
-                if (self.input[0].pckp && self.input[0].thrw)
+                for (int i = n; i < 10; i++)
                 {
-                    var room = self.room;
-                    var pos = self.mainBodyChunk.pos;
-                    var color = self.ShortCutColor();
-                    room.AddObject(new Explosion(room, self, pos, 7, 250f, 6.2f, 2f, 280f, 0.25f, self, 0.7f, 160f, 1f));
-                    room.AddObject(new Explosion.ExplosionLight(pos, 280f, 1f, 7, color));
-                    room.AddObject(new Explosion.ExplosionLight(pos, 230f, 1f, 3, new Color(1f, 1f, 1f)));
-                    room.AddObject(new ExplosionSpikes(room, pos, 14, 30f, 9f, 7f, 170f, color));
-                    room.AddObject(new ShockWave(pos, 330f, 0.045f, 5, false));
-
-                    room.ScreenMovement(pos, default, 1.3f);
-                    room.PlaySound(SoundID.Bomb_Explode, pos);
-                    room.InGameNoise(new Noise.InGameNoise(pos, 9000f, self, 1f));
+                    if (self.input[i].pckp)
+                    {
+                        return true;
+                    }
                 }
             }
+            return false;
+        }
 
+        private void TakeCustomInput(On.Player.orig_GrabUpdate orig, Player self, bool eu)
+        {
+            orig(self, eu);
+
+            if (ModManager.MSC && self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Rivulet)
+            {
+                if (tapPressedOnce(self, 2) && !self.input[1].pckp) 
+                {
+
+                    if (self.input[0].pckp)
+                    {
+                        var room = self.room;
+                        var pos = self.mainBodyChunk.pos;
+                        var color = self.ShortCutColor();
+                        room.AddObject(new Explosion(room, self, pos, 7, 250f, 6.2f, 2f, 280f, 0.25f, self, 0.7f, 160f, 1f));
+                        room.AddObject(new Explosion.ExplosionLight(pos, 280f, 1f, 7, color));
+                        room.AddObject(new Explosion.ExplosionLight(pos, 230f, 1f, 3, new Color(1f, 1f, 1f)));
+                        room.AddObject(new ExplosionSpikes(room, pos, 14, 30f, 9f, 7f, 170f, color));
+                        room.AddObject(new ShockWave(pos, 330f, 0.045f, 5, false));
+
+                        room.ScreenMovement(pos, default, 1.3f);
+                        room.PlaySound(SoundID.Bomb_Explode, pos);
+                        room.InGameNoise(new Noise.InGameNoise(pos, 9000f, self, 1f));
+                    }
+
+                }
+
+            }
         }
 
     }
